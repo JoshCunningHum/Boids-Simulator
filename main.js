@@ -12,7 +12,9 @@ var config = {
     showDistanceTracker: false,
     showFishDirection: false,
     preventWallCollision: true,
-    goToCenterIfNotFollowing: true
+    goToCenterIfNotFollowing: true,
+    showFollowLine: true,
+    showOneDetailed: false
 }
 
 var sens = {

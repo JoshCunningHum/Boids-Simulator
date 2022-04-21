@@ -97,7 +97,7 @@ class Fish{
         if(this.position[1] > c.height) this.position[1] = 0;
         else if(this.position[1] < 0) this.position[1] = c.height;
 
-        if(this.id == "SELECTED"){
+        if(this.id == "SELECTED" && config.showOneDetailed){
             
             // Range Finder
             this.ctx.fillStyle = "#999";
@@ -109,7 +109,7 @@ class Fish{
             this.ctx.fill();
         }
 
-        if(config.showFishDirection || this.id == "SELECTED"){
+        if(config.showFishDirection || (this.id == "SELECTED" && config.showOneDetailed)){
             this.ctx.strokeStyle = "white";
             this.ctx.beginPath();
             this.ctx.moveTo(...this.position);
@@ -151,7 +151,16 @@ class Fish{
         else if(this.angularMomentum > 30) this.angularMomentum = 30;
         else if(this.angularMomentum < -30) this.angularMomentum = -30;
 
-        if(this.id != "SELECTED") return;
+        if(config.showFollowLine && this.following && this.nearFishes.length > 0){
+            
+            this.ctx.strokeStyle = "aquamarine";
+            this.ctx.beginPath();
+            this.ctx.moveTo(...this.position);
+            this.ctx.lineTo(...this.nearFishes.find(e => e.obj.id == this.following).obj.position);
+            this.ctx.stroke();
+        }
+
+        if(this.id != "SELECTED" || !config.showOneDetailed) return;
 
             // Closest
             if(this.following && this.nearFishes.length > 0){
