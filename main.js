@@ -11,7 +11,8 @@ var avA = true,
 var config = {
     showDistanceTracker: false,
     showFishDirection: false,
-    preventWallCollision: true
+    preventWallCollision: true,
+    goToCenterIfNotFollowing: true
 }
 
 var sens = {
@@ -103,6 +104,12 @@ function avoidCloseWithinACone(){
     
             this.angularMomentum += aInc;
         }
+    }
+
+    if(config.goToCenterIfNotFollowing && this.following == ""){
+        const centerAngle = this.aBFCoord(c.width / 2, c.height / 2);
+
+        this.angularMomentum -= (sens.c / 2 * Math.sign(centerAngle)); 
     }
 
     if(this.nearFishes.length > 0) return true;

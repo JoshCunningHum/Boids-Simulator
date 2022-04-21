@@ -60,6 +60,11 @@ class Fish{
         detectionBehavior: null,
         behaviorEffect: null
     }){
+        if(Fish.instances.length > 50){
+            alert("You are smart but i'm sorry fish limit exceeded");
+            return;
+        }
+
         this.position = obj.position;
         this.direction = obj.direction;
         this.detectionBehavior = obj.detectionBehavior;
