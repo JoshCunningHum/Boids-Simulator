@@ -71,7 +71,9 @@ class Fish{
     move(){
         this.nearFishes.length = 0;
         this.speed = this.speed * 1.01 + 0.1;
-        if(this.speed > maxSpeed) this.speed = maxSpeed;
+        if(this.speed > maxSpeed){
+            this.speed = maxSpeed + ((this.speed - maxSpeed) * 0.5)
+        }
         this.position = determineCoord(this.position, this.direction, this.speed);
         if(this.position[0] > c.width) this.position[0] = 0;
         else if(this.position[0] < 0) this.position[0] = c.width;

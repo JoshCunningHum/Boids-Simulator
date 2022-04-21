@@ -83,6 +83,11 @@ function findFreeSpace(){
             if(aInc > 10) aInc = 10;
     
             this.angularMomentum += aInc;
+
+            // accelerate if fish found in the near back
+            if(fish.angle > angleBound[0] && fish.angle < (360 - Math.abs(angleBound[1]))){
+                this.speed += 1;
+            }
         }
     }
 
