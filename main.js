@@ -25,13 +25,18 @@ var stdout;
 const scAngle = deg2Rad(Math.atan2(c.height, c.width));
 
 c.addEventListener("click", function(e){
+    if(Fish.instances.length > 50){
+        alert("Fish Limit at Maximum");
+        return;
+    }
+
     new Fish({
         ctx: ctx,
         position: [e.clientX, e.clientY],
         direction: Math.random() * 360,
         detectionBehavior: avoidCloseWithinACone,
         behaviorEffect: findFreeSpace
-    })
+    });
 })
 
 function isWithinBounds(num, range){
@@ -43,6 +48,8 @@ function isWithinBounds(num, range){
 }
 
 function avoidCloseWithinACone(){
+
+    const aMIncrease = 10;
 
     for(let fish of Fish.instances){
         if(this.id == fish.id) continue;
@@ -56,6 +63,46 @@ function avoidCloseWithinACone(){
         if(!isWithinBounds(angle, angleBound) && distance > size * 5) continue;
 
         this.nearFishes.push({obj: fish, dist: distance, angle: angle});
+    }
+
+    // TODO WALL PREVENTION
+    if(config.preventWallCollision){
+        const wd = {
+            top: this.position[1],
+            bot: c.height - this.position[1],
+            left: this.position[0],
+            right: c.width - this.position[0]
+        }
+
+        for(let i in wd){
+            const dist = wd[i];
+
+            if(dist > detectionDistance || dist < 10) continue;
+
+            let aInc = aMIncrease, wallAngle;
+
+            switch(i){
+                case "top":
+                    wallAngle = this.aBFCoord(this.position[0], 0);
+                    break;
+                case "bot":
+                    wallAngle = this.aBFCoord(this.position[0], c.height);
+                    break;
+                case "left":
+                    wallAngle = this.aBFCoord(0, this.position[1]);
+                    break;
+                case "right":
+                    wallAngle = this.aBFCoord(c.width, this.position[1]);
+                    break;
+            }
+    
+            if(wallAngle <= 0) aInc *= -1;
+            aInc *= (detectionDistance * maxSpeed * sens.v) / (dist * dist);
+
+            if(aInc > 10) aInc = 10;
+    
+            this.angularMomentum += aInc;
+        }
     }
 
     if(this.nearFishes.length > 0) return true;
@@ -98,41 +145,20 @@ function findFreeSpace(){
     }
 
     let nearestFish = this.getNearest(this.following);
-    if(nearestFish == -1) return;
+    if(nearestFish != -1){
+        this.following = nearestFish.obj.id;
 
-    this.following = nearestFish.obj.id;
-
-    // Copy Direction
-    if(alA){
-        this.angularMomentum -= (this.direction - nearestFish.obj.direction) /  (sens.l * maxSpeed);
-    }
-
-    // Goto Center of nearest Fish
-    if(coA){
-        if(nearestFish.angle > 7 || nearestFish.angle < -7){
-            this.angularMomentum -= (sens.c / 10000 * Math.sign(nearestFish.angle)) * (nearestFish.dist * nearestFish.dist); 
+        // Copy Direction
+        if(alA){
+            this.angularMomentum -= (this.direction - nearestFish.obj.direction) /  (sens.l * maxSpeed);
         }
-    }
-
-
-    // TODO WALL PREVENTION
-    if(config.preventWallCollision){
-        const wd = {
-            top: this.position[1],
-            bot: c.height - this.position[1],
-            left: this.position[0],
-            right: c.width - this.position[0]
+    
+        // Goto Center of nearest Fish
+        if(coA){
+            if(nearestFish.angle > 7 || nearestFish.angle < -7){
+                this.angularMomentum -= (sens.c / 10000 * Math.sign(nearestFish.angle)) * (nearestFish.dist * nearestFish.dist); 
+            }
         }
-
-        const domain = [0, 0];
-
-        if(wd.top < wd.bot) domain[1] = 1;
-        else domain[1] = -1;
-
-        if(wd.left < wd.right) domain[0] = -1;
-        else domain[0] = 1;
-
-
     }
 }
 

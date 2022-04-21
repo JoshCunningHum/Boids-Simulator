@@ -183,6 +183,13 @@ class Fish{
 
         return angleRes;
     }
+    aBFCoord(x, y){
+        let angleRes = (this.direction - rad2Deg(Math.atan2(y - this.position[1], x - this.position[0]))) % 360;
+
+        if(angleRes > 180) angleRes = -(360 - angleRes);
+
+        return angleRes;
+    }
     getNearest(exception){
         if(this.nearFishes.length == 0) return -1;
 
