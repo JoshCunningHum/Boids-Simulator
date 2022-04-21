@@ -1,6 +1,6 @@
 const c = document.querySelector("#display");
 const ctx = c.getContext("2d");
-var size = 10, maxSpeed = 3, detectionDistance = 150, angleBound = [105, -105];
+var size = 10, maxSpeed = 3, detectionDistance = 150, angleBound = [60, -60];
 c.width = window.innerWidth;
 c.height = window.innerHeight;
 
