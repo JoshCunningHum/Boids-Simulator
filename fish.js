@@ -107,7 +107,9 @@ class Fish{
         this.direction = rD;
         this.angularMomentum /= 2;
 
-        if(this.angularMomentum < 0.1) this.angularMomentum = 0;
+        if(this.angularMomentum < 0.1 && this.angularMomentum > -0.1) this.angularMomentum = 0;
+        if(this.angularMomentum > 30) this.angularMomentum = 30;
+        if(this.angularMomentum < -30) this.angularMomentum = -30;
 
         // If Detection Behavior is found 
         if(this.detectionBehavior == null) return;
