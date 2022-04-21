@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: Poppins;
+    color: white;
+}
+
+#display {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+
+#config {
+    position: absolute;
+    max-width: 500px;
+    padding: 1rem;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    gap: 1rem;
+    opacity: 0.1;
+    transition: all .5s ease-in-out;
+}
+
+#config:hover {
+    transition: all .1s ease-in-out;
+    opacity: 1;
+}
+
+#config > div {
+    flex-grow: 1;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.btn {
+    padding: .5rem;
+    font-family: Poppins;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-sucess {
+    background: #198754;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
