@@ -40,6 +40,16 @@ function getAngleGaps(ang1, ang2){
     return [ max - min, (360 - max) + min];
 }
 
+function aglAbs(angle){
+    angle %= 360;
+
+    if(angle < 0){
+        return 360 - Math.abs(360);
+    }
+
+    return angle;
+}
+
 class Fish{
     static instances = [];
 
@@ -69,6 +79,7 @@ class Fish{
         drawTriangle(this.ctx, this.position,this.direction, size, this.color);
     }
     move(){
+        this.following = "";
         this.nearFishes.length = 0;
         this.speed = this.speed * 1.01 + 0.1;
         if(this.speed > maxSpeed){
@@ -101,15 +112,6 @@ class Fish{
             this.ctx.stroke();
         }
 
-        let rD = (this.direction + this.angularMomentum);
-        while(rD < 0) rD = 360 - rD;
-        
-        this.direction = rD;
-        this.angularMomentum /= 2;
-
-        if(this.angularMomentum < 0.1 && this.angularMomentum > -0.1) this.angularMomentum = 0;
-        if(this.angularMomentum > 30) this.angularMomentum = 30;
-        if(this.angularMomentum < -30) this.angularMomentum = -30;
 
         // If Detection Behavior is found 
         if(this.detectionBehavior == null) return;
@@ -132,6 +134,17 @@ class Fish{
                 this.ctx.closePath();
             }
         }
+
+        
+        let rD = (this.direction + this.angularMomentum);
+        while(rD < 0) rD = 360 - rD;
+        
+        this.direction = rD;
+        this.angularMomentum /= 2;
+
+        if(this.angularMomentum < 0.1 && this.angularMomentum > -0.1) this.angularMomentum = 0;
+        else if(this.angularMomentum > 30) this.angularMomentum = 30;
+        else if(this.angularMomentum < -30) this.angularMomentum = -30;
 
         if(this.id != "SELECTED") return;
 
@@ -170,13 +183,14 @@ class Fish{
 
         return angleRes;
     }
-    getNearest(exceptions){
+    getNearest(exception){
         if(this.nearFishes.length == 0) return -1;
 
         let target = -1, smallestDist = Infinity;
 
         for(let fish of this.nearFishes){
-            if(exceptions.some(e => e == fish.obj.id)) continue;
+            // if(fish.obj.id == "SELECTED") continue;
+            if(exception == fish.obj.id) continue;
 
             if(fish.dist < smallestDist){
                 smallestDist = fish.dist;
