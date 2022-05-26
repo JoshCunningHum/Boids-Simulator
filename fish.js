@@ -221,4 +221,14 @@ class Fish{
 
         return target;
     }
+    // Used for alignment behavior
+    getCorrectSteer(other){
+        let gaps = getAngleGaps(this.direction, other.direction), mult = 1, min = Math.min(...gaps);
+
+        if(this.direction + min != other.direction){
+            mult = -1;
+        }
+
+        return min * mult;
+    }
 }

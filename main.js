@@ -12,7 +12,7 @@ var config = {
     showDistanceTracker: false,
     showFishDirection: false,
     preventWallCollision: true,
-    goToCenterIfNotFollowing: true,
+    goToCenterIfNotFollowing: false,
     showFollowLine: true,
     showOneDetailed: false
 }
@@ -159,7 +159,7 @@ function findFreeSpace(){
 
         // Copy Direction
         if(alA){
-            this.angularMomentum -= (this.direction - nearestFish.obj.direction) /  (sens.l * maxSpeed);
+            this.angularMomentum += this.getCorrectSteer(nearestFish.obj) / (sens.l * maxSpeed);
         }
     
         // Goto Center of nearest Fish
